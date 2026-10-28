@@ -1,0 +1,446 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>작전 콴다 | 익명 공부방 & Q&A</title>
+<style>
+:root{--blue:#3569e8;--blue-dark:#244fb8;--pale:#edf3ff;--ink:#192847;--muted:#687995;--line:#dfe7f5;--bg:#f6f8fd;--green:#20a879;--purple:#8160e8;--red:#e04848}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif}button,input,select,textarea{font:inherit}
+button{border:0;border-radius:11px;padding:10px 14px;background:var(--blue);color:white;font-weight:750;cursor:pointer;transition:all 0.2s}button:hover{background:var(--blue-dark)}
+button.secondary{background:var(--pale);color:var(--blue-dark)}button.outline{background:#fff;color:var(--blue-dark);border:1px solid var(--line)}button.sm{padding:6px 10px;font-size:12px;border-radius:8px}button.danger{background:#fff0f0;color:var(--red);border:1px solid #ffd0d0}
+.app{max-width:1250px;margin:auto;min-height:100vh;display:grid;grid-template-columns:230px 1fr;background:#fff;box-shadow:0 5px 30px #1b376b08}.sidebar{background:#fff;border-right:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:7px}
+.brand{font-weight:900;font-size:21px;margin:0 8px 15px;display:flex;align-items:center;gap:6px}.brand span{color:var(--blue)}.brand small{display:block;font-size:11px;color:var(--muted);font-weight:500;margin-top:4px}
+.nav{width:100%;text-align:left;background:transparent;color:#526582;padding:12px;border-radius:10px;display:flex;align-items:center;gap:8px;font-size:14px}.nav.active,.nav:hover{background:var(--pale);color:var(--blue-dark);font-weight:bold}
+.user-box{margin-top:auto;padding:14px;border-radius:14px;background:#f5f8ff;border:1px solid var(--line);font-size:13px}
+.auth-badge{display:inline-block;padding:2px 7px;border-radius:10px;font-size:10px;font-weight:bold;margin-left:4px}
+.badge-cert{background:#e3f8ed;color:#188058;border:1px solid #b7edd0}.badge-anon{background:#f0eaff;color:#6b46c1;border:1px solid #d6c7ff}
+main{padding:22px;min-width:0}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+.control{border:1px solid var(--line);background:#fff;border-radius:11px;padding:11px 12px;outline-color:#9ab5ff;color:var(--ink);width:100%}
+.hero{background:linear-gradient(115deg,#eaf1ff,#dce8ff);border-radius:20px;padding:28px;display:flex;justify-content:space-between;align-items:center;gap:18px}
+.hero h1{font-size:clamp(24px,3.5vw,36px);margin:0 0 9px;letter-spacing:-1px}.hero h1 span{color:var(--blue)}.hero p{color:#435b86;margin:0 0 16px;font-size:14px}.mascot{font-size:60px}
+.chips{display:flex;gap:6px;flex-wrap:wrap}.chip{display:inline-block;background:#edf3ff;color:#4d6590;border-radius:20px;padding:4px 9px;font-size:12px;font-weight:600}.hero .chip{background:#ffffffb8}
+.section-title{display:flex;justify-content:space-between;align-items:center;margin:24px 0 12px;gap:8px}.section-title h2{font-size:18px;margin:0}
+.muted{color:var(--muted);font-size:13px;line-height:1.6}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.card{border:1px solid var(--line);background:white;border-radius:16px;padding:18px;box-shadow:0 4px 16px #254b8505}
+.view{display:none}.view.active{display:block}.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.field label{display:block;font-size:12px;font-weight:750;color:#5c6e8d;margin-bottom:6px}.field.wide{grid-column:1/-1}.field textarea{resize:vertical}
+.post{padding:18px;border:1px solid var(--line);border-radius:16px;margin:14px 0;background:#fff;box-shadow:0 2px 8px #00000005}.post h3{margin:8px 0 12px;font-size:17px}.post p{color:#3d4e6d;font-size:14px;line-height:1.6;white-space:pre-wrap}.post-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.answer-box{margin-top:16px;padding:14px;background:#f8fafc;border-radius:12px;border:1px solid var(--line)}.answer-item{background:#fff;padding:14px;border-radius:10px;border:1px solid var(--line);margin-top:10px}
+.empty{border:1px dashed #c7d5eb;border-radius:14px;padding:28px;text-align:center;color:var(--muted)}
+.study-room-panel{background:linear-gradient(135deg,#244fb8,#3569e8);color:white;border-radius:20px;padding:24px;margin-bottom:20px;text-align:center}
+.timer-display{font-size:52px;font-weight:900;font-family:monospace;margin:15px 0;letter-spacing:2px}
+.active-users{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:15px}.user-pill{background:rgba(255,255,255,0.2);padding:6px 14px;border-radius:20px;font-size:13px;display:flex;align-items:center;gap:6px}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1e2e4f;color:white;border-radius:12px;padding:12px 20px;display:none;z-index:99;font-size:13px;box-shadow:0 4px 15px rgba(0,0,0,0.2)}
+.modal-bg{position:fixed;inset:0;background:#14234177;display:none;align-items:center;justify-content:center;padding:16px;z-index:90}.modal-bg.open{display:flex}
+.modal{width:min(520px,100%);max-height:90vh;overflow:auto;background:#fff;border-radius:18px;padding:24px}.modal-end{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}
+@media(max-width:850px){.app{grid-template-columns:1fr}.sidebar{position:sticky;top:0;z-index:3;flex-direction:row;align-items:center;overflow:auto;padding:9px;border-right:0;border-bottom:1px solid var(--line)}.brand{font-size:15px;min-width:115px;margin:0}.brand small,.user-box{display:none}.nav{width:auto;white-space:nowrap;padding:8px 12px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}main{padding:14px}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+  <div class="brand">🎓 작전<span>콴다</span><small>작전고 실시간 학습 공간</small></div>
+  <button class="nav active" data-view="home">🏠 홈 / 가이드</button>
+  <button class="nav" data-view="room">🔥 독서실 (공부방 1개)</button>
+  <button class="nav" data-view="questions">❓ 콴다 Q&A 게시판</button>
+  
+  <div class="user-box" id="userSidebarBox">
+    <div style="font-weight:bold;margin-bottom:6px;" id="sideUserName">비회원 상태</div>
+    <div style="font-size:12px;color:var(--muted);" id="sideUserMode">로그인이 필요합니다</div>
+    <div style="margin-top:10px;display:flex;gap:5px;">
+      <button class="sm outline" style="width:100%" onclick="openAuthModal()" id="authBtn">로그인/가입</button>
+      <button class="sm secondary" style="display:none" id="anonToggleBtn" onclick="toggleAnonMode()">익명 전환</button>
+    </div>
+  </div>
+</aside>
+
+<main>
+  <div class="top">
+    <div style="font-weight:bold;font-size:18px;" id="topTitle">🏫 작전 콴다 서비스</div>
+    <button class="outline sm" onclick="openAuthModal()" id="topUserPill">👤 로그인하기</button>
+  </div>
+
+  <!-- HOME VIEW -->
+  <section class="view active" id="view-home">
+    <div class="hero">
+      <div>
+        <h1>작전고 <span>공부 친구</span> 커뮤니티</h1>
+        <p>열품타 스타일의 타이머 공부방과 콴다 스타일 문제 해결 게시판을 이용해보세요.</p>
+        <div class="chips">
+          <span class="chip">🔒 익명/인증 스위치</span>
+          <span class="chip">⏱ 실시간 독서실</span>
+          <span class="chip">✏️ 답변 수정 가능</span>
+        </div>
+      </div>
+      <div class="mascot">📚</div>
+    </div>
+
+    <div class="section-title"><h2>✨ 주요 기능 바로가기</h2></div>
+    <div class="grid">
+      <div class="card">
+        <h3>🔥 작전고 독서실 (1개의 단일방)</h3>
+        <p>실시간 타이머로 측정하고 익명 또는 실명으로 같이 집중해보세요.</p>
+        <button class="secondary sm" style="width:100%;margin-top:10px;" onclick="showView('room')">공부방 입장하기 →</button>
+      </div>
+      <div class="card">
+        <h3>❓ 콴다 Q&A</h3>
+        <p>모르는 문제를 질문하고 인증된 작성자 또는 익명 학생의 답을 받아보세요.</p>
+        <button class="secondary sm" style="width:100%;margin-top:10px;" onclick="showView('questions')">질문 보러가기 →</button>
+      </div>
+      <div class="card">
+        <h3>👤 계정 및 익명 선택</h3>
+        <p>학생 인증 계정으로 로그인 후 익명 모드로 언제든 전환할 수 있습니다.</p>
+        <button class="outline sm" style="width:100%;margin-top:10px;" onclick="openAuthModal()">로그인 / 가입</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- STUDY ROOM VIEW -->
+  <section class="view" id="view-room">
+    <div class="study-room-panel">
+      <h2>🔥 작전고 공식 실시간 공부방</h2>
+      <p style="opacity:0.9;font-size:14px;">타이머를 켜고 친구들과 함께 공부에 집중해보세요!</p>
+      <div class="timer-display" id="roomTimer">00:00:00</div>
+      <div style="display:flex;gap:10px;justify-content:center;">
+        <button id="timerBtn" style="background:#fff;color:var(--blue);font-weight:bold;padding:12px 24px;" onclick="toggleTimer()">▶ 공부 시작하기</button>
+      </div>
+      <div style="margin-top:20px;font-size:13px;opacity:0.9;">현재 집중 중인 작전고 학우</div>
+      <div class="active-users" id="activeUsersList">
+        <span class="user-pill">🟢 익명 토끼 (01:23:40)</span>
+        <span class="user-pill">🟢 열공2학년 (00:45:12)</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- QUESTIONS VIEW -->
+  <section class="view" id="view-questions">
+    <div class="section-title">
+      <h2>❓ 콴다 질문 게시판</h2>
+      <button onclick="openQuestionModal()">+ 질문 올리기</button>
+    </div>
+    <p class="muted">모르는 문제나 공부 관련 궁금증을 남겨보세요.</p>
+    <div id="questionsList"></div>
+  </section>
+</main>
+</div>
+
+<!-- MODALS -->
+<div class="modal-bg" id="modalBg"><div class="modal" id="modalContent"></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+// State Management
+let currentUser = JSON.parse(localStorage.getItem('jq_user')) || null;
+let isAnon = localStorage.getItem('jq_isAnon') === 'true';
+let questions = JSON.parse(localStorage.getItem('jq_questions')) || [
+  {
+    id: 101,
+    author: "작전고2학년",
+    isCert: true,
+    isAnon: false,
+    subject: "수학",
+    title: "수학 II 삼차함수 비율관계 질문입니다!",
+    body: "극댓값과 극솟값 차이 구할 때 공식 적용이 헷갈리는데 쉽게 외우는 법 있나요?",
+    answers: [
+      {
+        id: 201,
+        author: "익명 독수리",
+        isCert: false,
+        isAnon: true,
+        body: "삼차함수 비율관계는 2:1 법칙 기억하시면 편해요! 변곡점 기준으로 1:1:1 됩니다.",
+        updatedAt: null
+      }
+    ]
+  }
+];
+
+let timerInterval = null;
+let seconds = 0;
+let isTimerRunning = false;
+
+function saveQuestions() {
+  localStorage.setItem('jq_questions', JSON.stringify(questions));
+}
+
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.display = 'block';
+  setTimeout(() => t.style.display = 'none', 2500);
+}
+
+function showView(v) {
+  document.querySelectorAll('.view').forEach(e => e.classList.remove('active'));
+  document.querySelectorAll('.nav').forEach(e => e.classList.remove('active'));
+  document.getElementById('view-' + v).classList.add('active');
+  const targetNav = Array.from(document.querySelectorAll('.nav')).find(b => b.getAttribute('data-view') === v);
+  if (targetNav) targetNav.classList.add('active');
+  if (v === 'questions') renderQuestions();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+document.querySelectorAll('.nav').forEach(b => {
+  b.onclick = () => showView(b.getAttribute('data-view'));
+});
+
+function updateAuthUI() {
+  const nameEl = document.getElementById('sideUserName');
+  const modeEl = document.getElementById('sideUserMode');
+  const authBtn = document.getElementById('authBtn');
+  const anonBtn = document.getElementById('anonToggleBtn');
+  const topPill = document.getElementById('topUserPill');
+
+  if (currentUser) {
+    const dispName = isAnon ? (currentUser.anonNick || "익명 부엉이") : currentUser.name;
+    const badge = isAnon ? '<span class="auth-badge badge-anon">익명</span>' : '<span class="auth-badge badge-cert">인증학생</span>';
+    
+    nameEl.innerHTML = dispName + " " + badge;
+    modeEl.textContent = isAnon ? "익명 모드 사용 중" : currentUser.email;
+    authBtn.textContent = "로그아웃";
+    authBtn.onclick = logout;
+    anonBtn.style.display = "block";
+    anonBtn.textContent = isAnon ? "실명 전환" : "익명 전환";
+    topPill.textContent = "👤 " + dispName;
+    topPill.onclick = () => toast("현재 로그인되어 있습니다: " + dispName);
+  } else {
+    nameEl.textContent = "비회원 상태";
+    modeEl.textContent = "로그인이 필요합니다";
+    authBtn.textContent = "로그인/가입";
+    authBtn.onclick = openAuthModal;
+    anonBtn.style.display = "none";
+    topPill.textContent = "👤 로그인하기";
+    topPill.onclick = openAuthModal;
+  }
+}
+
+function toggleAnonMode() {
+  isAnon = !isAnon;
+  localStorage.setItem('jq_isAnon', isAnon);
+  updateAuthUI();
+  toast(isAnon ? "익명 모드로 전환되었습니다." : "인증 실명 모드로 전환되었습니다.");
+  renderQuestions();
+}
+
+function openAuthModal() {
+  openModal(`
+    <h2>로그인 / 학생 인증</h2>
+    <div class="form-grid">
+      <div class="field wide"><label>이메일 또는 학번</label><input class="control" id="loginEmail" placeholder="student@jakjeon.hs.kr"></div>
+      <div class="field wide"><label>이름 / 별명</label><input class="control" id="loginName" placeholder="작전고 학생"></div>
+    </div>
+    <div class="modal-end">
+      <button class="outline" onclick="closeModal()">취소</button>
+      <button onclick="login()">로그인하기</button>
+    </div>
+  `);
+}
+
+function login() {
+  const email = document.getElementById('loginEmail').value.trim();
+  const name = document.getElementById('loginName').value.trim() || "작전고 학생";
+  if (!email) { toast("이메일 또는 학번을 입력하세요."); return; }
+  
+  currentUser = { email, name, anonNick: "익명 " + ["호랑이", "부엉이", "토끼", "사자"][Math.floor(Math.random()*4)] };
+  localStorage.setItem('jq_user', JSON.stringify(currentUser));
+  closeModal();
+  updateAuthUI();
+  toast("성공적으로 로그인되었습니다!");
+}
+
+function logout() {
+  currentUser = null;
+  localStorage.removeItem('jq_user');
+  updateAuthUI();
+  toast("로그아웃 되었습니다.");
+}
+
+function openModal(html) {
+  document.getElementById('modalContent').innerHTML = html;
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal() { document.getElementById('modalBg').classList.remove('open'); }
+document.getElementById('modalBg').onclick = e => { if (e.target.id === 'modalBg') closeModal(); };
+
+// Room Timer
+function toggleTimer() {
+  const btn = document.getElementById('timerBtn');
+  if (!isTimerRunning) {
+    isTimerRunning = true;
+    btn.textContent = "⏸ 일시정지";
+    btn.style.background = "#ffd0d0";
+    btn.style.color = "#d93838";
+    timerInterval = setInterval(() => {
+      seconds++;
+      const hrs = String(Math.floor(seconds/3600)).padStart(2,'0');
+      const mins = String(Math.floor((seconds%3600)/60)).padStart(2,'0');
+      const secs = String(seconds%60).padStart(2,'0');
+      document.getElementById('roomTimer').textContent = `${hrs}:${mins}:${secs}`;
+    }, 1000);
+  } else {
+    isTimerRunning = false;
+    clearInterval(timerInterval);
+    btn.textContent = "▶ 공부 계속하기";
+    btn.style.background = "#fff";
+    btn.style.color = "var(--blue)";
+  }
+}
+
+// Q&A System
+function renderQuestions() {
+  const container = document.getElementById('questionsList');
+  if (questions.length === 0) {
+    container.innerHTML = '<div class="empty">질문이 없습니다. 첫 질문을 남겨보세요!</div>';
+    return;
+  }
+
+  container.innerHTML = questions.slice().reverse().map(q => {
+    const authorBadge = q.isAnon ? '<span class="auth-badge badge-anon">익명</span>' : '<span class="auth-badge badge-cert">인증학생</span>';
+    
+    const answersHtml = q.answers.map(ans => {
+      const isMyAns = currentUser && (
+        (ans.isAnon && isAnon) || 
+        (!ans.isAnon && ans.author === currentUser.name)
+      );
+      
+      const editBtn = isMyAns ? `<button class="sm outline" onclick="openEditAnswerModal(${q.id}, ${ans.id})">✏️ 수정</button>` : '';
+      const updatedTag = ans.updatedAt ? '<span style="font-size:11px;color:var(--muted);margin-left:4px;">(수정됨)</span>' : '';
+
+      return `
+        <div class="answer-item">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+            <span style="font-weight:bold;font-size:13px;">${ans.author} ${ans.isAnon ? '<span class="auth-badge badge-anon">익명</span>':'<span class="auth-badge badge-cert">인증</span>'} ${updatedTag}</span>
+            ${editBtn}
+          </div>
+          <p style="margin:0;font-size:13px;">${ans.body}</p>
+        </div>
+      `;
+    }).join('');
+
+    return `
+      <div class="post">
+        <div><span class="chip">${q.subject}</span> <span style="font-size:13px;color:var(--muted);">${q.author} ${authorBadge}</span></div>
+        <h3>${q.title}</h3>
+        <p>${q.body}</p>
+        
+        <div class="answer-box">
+          <div style="font-weight:bold;font-size:13px;margin-bottom:8px;">💬 답변 (${q.answers.length})</div>
+          ${answersHtml || '<div style="font-size:12px;color:var(--muted);">아직 답변이 없습니다. 첫 답변을 작성해주세요!</div>'}
+          <button class="sm secondary" style="margin-top:10px;" onclick="openAnswerModal(${q.id})">+ 답변 달기</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function openQuestionModal() {
+  openModal(`
+    <h2>❓ 질문 올리기</h2>
+    <div class="form-grid">
+      <div class="field"><label>과목</label><select class="control" id="qSub"><option>수학</option><option>영어</option><option>국어</option><option>과학</option><option>사회</option></select></div>
+      <div class="field wide"><label>제목</label><input class="control" id="qTitleInput" placeholder="질문 제목"></div>
+      <div class="field wide"><label>내용</label><textarea class="control" id="qBodyInput" rows="4" placeholder="궁금한 내용을 자세히 작성해주세요."></textarea></div>
+    </div>
+    <div class="modal-end">
+      <button class="outline" onclick="closeModal()">취소</button>
+      <button onclick="createQuestion()">등록하기</button>
+    </div>
+  `);
+}
+
+function createQuestion() {
+  const subject = document.getElementById('qSub').value;
+  const title = document.getElementById('qTitleInput').value.trim();
+  const body = document.getElementById('qBodyInput').value.trim();
+  
+  if (!title || !body) { toast("제목과 내용을 작성해주세요."); return; }
+  
+  const author = currentUser ? (isAnon ? (currentUser.anonNick || "익명 학생") : currentUser.name) : "익명 학생";
+  
+  questions.push({
+    id: Date.now(),
+    author,
+    isCert: !!currentUser,
+    isAnon: isAnon || !currentUser,
+    subject,
+    title,
+    body,
+    answers: []
+  });
+
+  saveQuestions();
+  closeModal();
+  renderQuestions();
+  toast("질문이 등록되었습니다.");
+}
+
+function openAnswerModal(qId) {
+  openModal(`
+    <h2>✏️ 답변 작성하기</h2>
+    <div class="field wide"><label>답변 내용</label><textarea class="control" id="ansBodyInput" rows="4" placeholder="해설이나 답변을 작성하세요."></textarea></div>
+    <div class="modal-end">
+      <button class="outline" onclick="closeModal()">취소</button>
+      <button onclick="addAnswer(${qId})">답변 등록</button>
+    </div>
+  `);
+}
+
+function addAnswer(qId) {
+  const body = document.getElementById('ansBodyInput').value.trim();
+  if (!body) { toast("답변 내용을 입력하세요."); return; }
+
+  const q = questions.find(x => x.id === qId);
+  if (q) {
+    const author = currentUser ? (isAnon ? (currentUser.anonNick || "익명 학생") : currentUser.name) : "익명 학생";
+    q.answers.push({
+      id: Date.now(),
+      author,
+      isCert: !!currentUser,
+      isAnon: isAnon || !currentUser,
+      body,
+      updatedAt: null
+    });
+    saveQuestions();
+    closeModal();
+    renderQuestions();
+    toast("답변이 등록되었습니다.");
+  }
+}
+
+function openEditAnswerModal(qId, ansId) {
+  const q = questions.find(x => x.id === qId);
+  if (!q) return;
+  const ans = q.answers.find(a => a.id === ansId);
+  if (!ans) return;
+
+  openModal(`
+    <h2>✏️ 답변 수정하기</h2>
+    <div class="field wide"><label>답변 내용</label><textarea class="control" id="editAnsBodyInput" rows="4">${ans.body}</textarea></div>
+    <div class="modal-end">
+      <button class="outline" onclick="closeModal()">취소</button>
+      <button onclick="updateAnswer(${qId}, ${ansId})">수정 완료</button>
+    </div>
+  `);
+}
+
+function updateAnswer(qId, ansId) {
+  const newBody = document.getElementById('editAnsBodyInput').value.trim();
+  if (!newBody) { toast("내용을 입력해주세요."); return; }
+
+  const q = questions.find(x => x.id === qId);
+  if (q) {
+    const ans = q.answers.find(a => a.id === ansId);
+    if (ans) {
+      ans.body = newBody;
+      ans.updatedAt = new Date().toISOString();
+      saveQuestions();
+      closeModal();
+      renderQuestions();
+      toast("답변이 수정되었습니다.");
+    }
+  }
+}
+
+// Init
+updateAuthUI();
+</script>
+</body>
+</html>
